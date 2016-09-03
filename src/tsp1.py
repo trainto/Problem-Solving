@@ -2,11 +2,16 @@ import sys
 import math
 
 def tsp(start, N):
-    if n == 1:
-
+    print(start)
+    print(N)
+    if bin(N).count('1') == 1:
+        return distances[start][N]
     if memo[start][N]:
         return memo[start][N]
+    for newStart in list(filter(lambda x: N[x] == '1', range(len(bin(N))))):
+        print(newstart)
 
+    return 1
 
 rl = lambda: sys.stdin.readline()
 # for tc in range(int(rl())):
@@ -25,10 +30,12 @@ for tc in range(1):
     memo = [
         [0 for _ in range(2 ** (len(distances) - 2))] for _ in range(len(distances))
     ]
-
+    print(memo)
+    initN = int('1' * (len(distances) - 1), 2)
+    print(initN)
     answer = math.inf
     for start in range(1, len(distances)):
-        candidateAnswer = tsp(start, 2 ** (len(distances) - 2))
+        candidateAnswer = tsp(start, initN ^ (1 << start))
         answer = min(candidateAnswer, answer)
 
     print("{:.10f}".format(answer))

@@ -1,56 +1,42 @@
 import time
 import random
 
-class Node:
-    def __init__(self, val, depth, isLeft):
-        self.val = val
-        self.depth = depth
-        self.isLeft = isLeft
-        self.left = None
-        self.right = None
-    def addLeft(self, node):
-        self.left = node
-    def addRight(self, node):
-        self.right = node
-
-def isWeird(divisors, num):
-    root = Node(0, 0, False)
-    stack = []
-    stack.append(root)
-    while len(stack) != 0:
-        cur = stack.pop()
-        if (cur.val == num):
-            del root
-            del stack
+def isWerid(divisorSubset, num, subTotal, depth = 0):
+    if depth <= divisorsN:
+        if subTotal > num:
+            return True
+        if subTotal == num:
             return False
-        elif cur.val > num:
-            if cur.isLeft:
-                temp = stack.pop()
-                del temp
-            continue
-        else:
-            if cur.depth + 1 > len(divisors):
-                continue
-            cur.addLeft(Node(cur.val + divisors[cur.depth], cur.depth + 1, True))
-            cur.addRight(Node(cur.val, cur.depth + 1, False))
-            stack.append(cur.right)
-            stack.append(cur.left)
+        if depth == divisorsN:
+            return True
 
-    del root
-    del stack
-    return True
+    divisorSubset.append(divisors[depth])
+    ret1 = isWerid(divisorSubset[:], num, subTotal + divisors[depth], depth + 1)
+    if subTotal + divisors[depth] > num:
+        return True
+    divisorSubset.pop()
+    ret2 = isWerid(divisorSubset[:], num, subTotal, depth + 1)
+
+    if not ret1 or not ret2:
+        return False
+    else:
+        return True
 
 # for i in range(int(input())):
 start = time.time()
 for _ in range(50):
     # num = int(input())
-    # num = random.randrange(2, 500000)
-    num = 426270
+    num = random.randrange(2, 500000)
+    # num = 426270
+    # num = 12
     divisors = list(filter(lambda x: num % x == 0, range(1, int(num/2) + 1)))
-    print(len(divisors))
-    print(divisors)
-    total = sum(divisors)
-    if total > num and isWeird(divisors, num): # first condition
+    divisorsN = len(divisors)
+    print(num, len(divisors))
+    # print(len(divisors))
+    # print(divisors)
+    # total = sum(divisors)
+    # if total > num and isWeird(divisors, num): # first condition
+    if sum(divisors) > num and isWerid([], num, 0):
         print("weird")
     else:
         print("not weird")

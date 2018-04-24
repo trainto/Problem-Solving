@@ -1,17 +1,17 @@
 def isOpen(ch):
     if (ch == '(' or ch == '{' or ch == '['):
-        return True;
-    return False;
+        return True
+    return False
 
 def isMatched(pair):
     if (pair == '()' or pair == '{}' or pair == '[]'):
-        return True;
-    return False;
+        return True
+    return False
 
 for i in range(int(input())):
     data = input()
     stack = []
-    isFailed = False;
+    isFailed = False
     for j in range(len(data)):
         if isOpen(data[j]):
             stack.append(data[j])

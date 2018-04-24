@@ -10,6 +10,6 @@ for i in range(numtc):
         print(rawData[2] + rawData[4] + rawData[5] + rawData[6])
     else:
         error = int(check, 2)
-        rawDataList = list(rawData);
+        rawDataList = list(rawData)
         rawDataList[error-1] = str(abs(int(rawData[error-1], 2) - 1))
         print(rawDataList[2] + rawDataList[4] + rawDataList[5] + rawDataList[6])

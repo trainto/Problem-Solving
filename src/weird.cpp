@@ -1,51 +1,35 @@
 #include <iostream>
 #include <vector>
-#include <numeric>
-#include <cstring>
 
 using namespace std;
 
-bool bitmask[1000001];
-
-bool isWeird(int n) {
-  vector<int> canMake;
-  vector<int> divisors;
-  divisors.push_back(1);
-  for (int i =2; i < n / 2 + 1; ++i) {
-    if (n % i == 0) {
-      divisors.push_back(i);
-    }
+bool is_subset_sum_n(vector<int> &pd, int n, int sum, int depth) {
+  if (sum == n) {
+    return true;
   }
-
-  if (accumulate(divisors.begin(), divisors.end(), 0) <= n) return false;
-
-  memset(bitmask, 0, sizeof(bitmask));
-  canMake.clear();
-  canMake.reserve(n+10);
-  bitmask[0] = true;
-  canMake.push_back(0);
-  for (int i = 0; i < divisors.size(); ++i)
-    for (int j = canMake.size()-1; j >= 0; --j) {
-      int k = canMake[j] + divisors[i];
-      if(!bitmask[k] && k <= n) {
-        if(k == n) return false;
-        bitmask[k] = true;
-        canMake.push_back(k);
-      }
-    }
-  return true;
+  if (sum > n || depth < 0) {
+    return false;
+  }
+  return is_subset_sum_n(pd, n, sum + pd[depth], depth - 1) || is_subset_sum_n(pd, n, sum, depth - 1);
 }
 
 int main() {
   int tc;
+  int n;
+  vector<int> pd; // Proper dividers
+  int div_sum = 0;
   cin >> tc;
-  for (int i = 0; i < tc; i++) {
-    int num;
-    cin >> num;
-    if (isWeird(num)) {
-      cout << "weird" << endl;
-    } else {
-      cout << "not weird" << endl;
+  while (tc--) {
+    cin >> n;
+    for (int i = 1; i < n / 2 + 1; i++) {
+      if (n % i == 0) {
+        pd.push_back(i);
+        div_sum += i;
+      }
     }
+
+    cout << ((div_sum > n && !is_subset_sum_n(pd, n, 0, pd.size() - 1)) ? "weird" : "not weird") << endl;
+    pd.clear();
+    div_sum = 0;
   }
 }

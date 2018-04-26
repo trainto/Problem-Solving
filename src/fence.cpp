@@ -2,9 +2,34 @@
 
 using namespace std;
 
-int main() {
-  int fence[20000];
+int fence[20000];
 
+int find_max_block(const int left, const int right) {
+  if (left == right) {
+    return fence[left];
+  }
+  int mid = (left + right) / 2;
+  int ret = max(find_max_block(left, mid), find_max_block(mid + 1, right));
+  int search_left = mid;
+  int search_right = mid + 1;
+  int min_height = min(fence[search_left], fence[search_right]);
+  ret = max(ret, min_height * 2);
+
+  while (search_left > left || search_right < right) {
+    if (search_left > left && (search_right == right || fence[search_left - 1] > fence[search_right + 1])) {
+      search_left--;
+      min_height = min(min_height, fence[search_left]);
+    } else {
+      search_right++;
+      min_height = min(min_height, fence[search_right]);
+    }
+    ret = max(ret, min_height * (search_right - search_left + 1));
+  }
+
+  return ret;
+}
+
+int main() {
   int c;
   cin >> c;
   while (c--) {
@@ -13,33 +38,6 @@ int main() {
     for (int i = 0; i < n; i++) {
       cin >> fence[i];
     }
-
-    /* Time consumption
-    int max = 0;
-    int candidate = 0;
-    int height = 0;
-    for (int i = 0; i < n; i++) {
-      height = fence[i];
-      for (int j = i + 1; j < n; j++) {
-        if (height > fence[j]) {
-          candidate = height * (j - i);
-          height = fence[j];
-          max = max > candidate ? max : candidate;
-        }
-
-        if (j == n - 1) {
-          candidate = height * (n - i);
-          max = max > candidate ? max : candidate;
-        }
-      }
-
-      if (i == n - 1) {
-        candidate = height * (n - i);
-        max = max > candidate ? max : candidate;
-      }
-    }
-
-    cout << max << endl;
-    */
+    cout << find_max_block(0, n - 1) << endl;
   }
 }

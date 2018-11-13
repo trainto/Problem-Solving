@@ -1,3 +1,2 @@
-# algospot
-Source code for resolving algospot
-알고스팟 문제풀이
+# algospot, leetcode
+Source code for resolving problems

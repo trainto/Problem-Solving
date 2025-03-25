@@ -7,7 +7,6 @@ var combinationSum2 = function (candidates, target) {
   const ret = [];
 
   const sorted = candidates.sort((a, b) => a > b ? 1 : -1);
-  console.log(sorted);
 
   const retrieve = (arr, i, cum) => {
     const sum = cum + sorted[i];
